@@ -165,4 +165,112 @@
 		});
 	}
 
+	/////////////////////////////////////////
+
+	// Search functionality
+	$('.header-search form').on('submit', function(e) {
+		e.preventDefault();
+		var searchTerm = $(this).find('input.input').val().toLowerCase();
+		var categoryValue = $(this).find('select.input-select').val();
+		var categoryText = $(this).find('select.input-select option:selected').text().toLowerCase();
+		
+		if (searchTerm.trim() === '') {
+			alert('Please enter a search term');
+			return;
+		}
+		
+		// Category mapping
+		var categoryMap = {
+			'0': 'all',
+			'1': 'laptops',
+			'2': 'graphic cards',
+			'3': 'processors',
+			'4': 'ram',
+			'5': 'monitors',
+			'6': 'gaming desktops',
+			'7': 'accessories',
+			'8': 'desktops',
+			'hp': 'hp',
+			'dell': 'dell',
+			'lenovo': 'lenovo',
+			'acer': 'acer',
+			'asus': 'asus'
+		};
+		
+		var selectedCategory = categoryMap[categoryValue] || 'all';
+		
+		// Check if it's a brand filter (hp, dell, lenovo, acer, asus)
+		var isBrandFilter = ['hp', 'dell', 'lenovo', 'acer', 'asus'].includes(selectedCategory);
+		
+		// Filter products based on search term and category
+		var visibleCount = 0;
+		$('.product').each(function() {
+			var productName = $(this).find('.product-name').text().toLowerCase();
+			var productCategory = $(this).find('.product-category').text().toLowerCase();
+			var productBrand = $(this).data('brand') || '';
+			
+			var matchesSearch = productName.includes(searchTerm) || productCategory.includes(searchTerm);
+			
+			var matchesCategory = false;
+			if (isBrandFilter) {
+				// If brand filter is selected, match by brand
+				matchesCategory = productCategory.includes('desktops') && productBrand === selectedCategory;
+			} else {
+				// Regular category matching
+				matchesCategory = selectedCategory === 'all' || productCategory.includes(selectedCategory);
+			}
+			
+			if (matchesSearch && matchesCategory) {
+				$(this).show();
+				visibleCount++;
+			} else {
+				$(this).hide();
+			}
+		});
+		
+		// Show message if no products found
+		$('.alert-info').remove();
+		if (visibleCount === 0) {
+			var message = 'No products found';
+			if (selectedCategory !== 'all') {
+				message += ' in ' + categoryText;
+			}
+			message += ' matching "' + searchTerm + '"';
+			$('.section').first().prepend('<div class="alert alert-info" style="margin: 15px;">' + message + '</div>');
+		}
+	});
+
+	// Clear search on input change
+	$('.header-search input.input').on('input', function() {
+		if ($(this).val().trim() === '') {
+			$('.product').show();
+			$('.alert-info').remove();
+		}
+	});
+
+	/////////////////////////////////////////
+
+	// Brand filter functionality for Desktops
+	$('.brand-filter-btn').on('click', function() {
+		var selectedBrand = $(this).data('brand');
+		
+		// Update active button
+		$(this).siblings('.brand-filter-btn').removeClass('active');
+		$(this).addClass('active');
+		
+		// Get the parent tab container
+		var $tabContainer = $(this).closest('.tab-pane');
+		
+		// Filter products within this tab
+		$tabContainer.find('.product').each(function() {
+			var productBrand = $(this).data('brand');
+			
+			if (selectedBrand === 'all' || productBrand === selectedBrand) {
+				$(this).show();
+			} else {
+				$(this).hide();
+			}
+		});
+	});
+
 })(jQuery);

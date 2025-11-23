@@ -1,5 +1,5 @@
 /*
-Template Name: Electro - HTML Ecommerce Template
+Template Name: CobbyMills Computers - HTML Ecommerce Template
 Author: yaminncco
 
 Colors:
@@ -2175,6 +2175,41 @@ textarea.input {
   }
 }
 
+/*----------------------------*\
+	Brand Filter
+\*----------------------------*/
+
+.brand-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.brand-filter-btn {
+  padding: 8px 20px;
+  background-color: #FFF;
+  border: 1px solid #E4E7ED;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.brand-filter-btn:hover {
+  background-color: #E4E7ED;
+  border-color: #D10024;
+  color: #D10024;
+}
+
+.brand-filter-btn.active {
+  background-color: #D10024;
+  border-color: #D10024;
+  color: #FFF;
+}
+
 @media only screen and (max-width: 480px) {
   [class*='col-xs'] {
     width: 100%;
@@ -2186,5 +2221,12 @@ textarea.input {
   .store-pagination {
     float: none;
     margin-top: 10px;
+  }
+  .brand-filter {
+    justify-content: center;
+  }
+  .brand-filter-btn {
+    padding: 6px 15px;
+    font-size: 12px;
   }
 }
